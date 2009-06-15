@@ -1,6 +1,6 @@
 === Admin Post Navigation ===
 Contributors: Scott Reilly
-Donate link: http://coffee2code.com
+Donate link: http://coffee2code.com/donate
 Tags: admin, navigation, post, next, previous, edit
 Requires at least: 2.6
 Tested up to: 2.8
