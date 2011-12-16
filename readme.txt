@@ -2,17 +2,17 @@
 Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: admin, navigation, post, next, previous, edit, post types, coffee2code
-Requires at least: 2.8
-Tested up to: 3.2
-Stable tag: 1.6.1
-Version: 1.6.1
+Requires at least: 3.0
+Tested up to: 3.3
+Stable tag: 1.7
+Version: 1.7
 
-Adds links to the next and previous posts when editing a post in the WordPress admin.
+Adds links to navigate to the next and previous posts when editing a post in the WordPress admin.
 
 
 == Description ==
 
-Adds links to the next and previous posts when editing a post in the WordPress admin.
+Adds links to navigate to the next and previous posts when editing a post in the WordPress admin.
 
 This plugin adds "<< Previous" and "Next >>" links to the "Edit Post" admin page, if a previous and next post are present, respectively.  The link titles (visible when hovering over the links) reveal the title of the previous/next post.  The links link to the "Edit Post" admin page for the previous/next posts so that you may edit them.
 
@@ -20,7 +20,7 @@ Currently, a previous/next post is determined by the next lower/higher valid pos
 
 NOTE: Be sure to save the post currently being edited before navigating away to the previous/next post.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-post-navigation/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-post-navigation/) | [Plugin Directory Page](http://wordpress.org/extend/plugins/admin-post-navigation/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -45,9 +45,9 @@ See the Filters section for the `c2c_admin_post_navigation_orderby` filter, whic
 
 == Filters ==
 
-The plugin is further customizable via three filters. Typically, these customizations would be put into your active theme's functions.php file, or used by another plugin.
+The plugin is further customizable via four filters. Typically, these customizations would be put into your active theme's functions.php file, or used by another plugin.
 
-= c2c_admin_post_navigation_orderby =
+= c2c_admin_post_navigation_orderby (filter) =
 
 The 'c2c_admin_post_navigation_orderby' filter allows you to change the post field used in the ORDER BY clause for the SQL to find the previous/next post.  By default this is 'ID' for non-hierarchical post types (such as posts) and 'post_title' for hierarchical post types (such as pages).  If you wish to change this, hook this filter.  This is not typical usage for most users.
 
@@ -62,7 +62,7 @@ function order_apn_by_post_date( $field ) {
 	return 'post_date';
 }`
 
-= c2c_admin_post_navigation_post_statuses =
+= c2c_admin_post_navigation_post_statuses (filter) =
 
 The 'c2c_admin_post_navigation_post_statuses' filter allows you to modify the list of post_statuses used as part of the search for the prev/next post.  By default this array includes 'draft', 'future', 'pending', 'private', and 'publish'.  If you wish to change this, hook this filter.  This is not typical usage for most users.
 
@@ -81,7 +81,7 @@ function change_apn_post_status( $post_statuses ) {
 }
 `
 
-= c2c_admin_post_navigation_post_types =
+= c2c_admin_post_navigation_post_types (filter) =
 
 The 'c2c_admin_post_navigation_post_types' filter allows you to modify the list of post_types used as part of the search for the prev/next post.  By default this array includes all available post types.  If you wish to change this, hook this filter.
 
@@ -109,7 +109,7 @@ function remove_recipe_apn_post_types( $post_types ) {
 }
 `
 
-= c2c_admin_post_navigation_display =
+= c2c_admin_post_navigation_display (filter) =
 
 The 'c2c_admin_post_navigation_display' filter allows you to customize the output links for the post navigation.
 
@@ -129,6 +129,26 @@ function override_apn_display( $text ) {
 
 
 == Changelog ==
+
+= 1.7 =
+* Add support for localization
+* Use post type label instead of post type name, when possible, in link title attribute
+* Use larr/rarr characters to denote direction of navigation instead of larquo/rarquo
+* Enhanced styling of navigation links
+* Hook 'admin_enqueue_scripts' action instead of 'admin_head' to output CSS
+* Hook 'load-post.php' to add actions for the post.php page rather than using $pagenow
+* Add version() to return plugin version
+* Add register_post_page_hooks()
+* Remove admin_init() and hook 'do_meta_boxes' in register_post_page_hooks() instead
+* Update screenshots for WP 3.3
+* Note compatibility through WP 3.3+
+* Drop compatibility with versions of WP older than 3.0
+* Update screenshots for WP 3.3
+* Tweak plugin description
+* Add link to plugin directory page to readme.txt
+* Minor code reformatting
+* Minor readme.txt reformatting
+* Update copyright date (2012)
 
 = 1.6.1 =
 * Use ucfirst() instead of strtoupper() to capitalize post type name for metabox title
