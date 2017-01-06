@@ -227,6 +227,9 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
 
 == Changelog ==
 
+= () =
+* Change: For unit tests, default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable.
+
 = 2.0 (2016-01-14) =
 * New: Add support for RTL display.
 * New: Enable post navigation for media when viewed/edited from list mode.
