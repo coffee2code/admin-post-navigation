@@ -189,9 +189,12 @@ class c2c_AdminPostNavigation {
 		$prev = self::previous_post();
 		if ( $prev ) {
 			$post_title = strip_tags( get_the_title( $prev ) );
-			$display .= '<a href="' . get_edit_post_link( $prev->ID ) . '" id="admin-post-nav-prev" title="' .
-				esc_attr( sprintf( __( 'Previous %1$s: %2$s', 'admin-post-navigation' ), $context, $post_title ) ) .
-				'" class="admin-post-nav-prev add-new-h2">' . self::$prev_text . '</a>';
+			$display .= sprintf(
+				'<a href="%s" id="admin-post-nav-prev" title="%s" class="admin-post-nav-prev add-new-h2">%s</a>',
+				get_edit_post_link( $prev->ID ),
+				esc_attr( sprintf( __( 'Previous %1$s: %2$s', 'admin-post-navigation' ), $context, $post_title ) ),
+				self::$prev_text
+			);
 		}
 
 		$next = self::next_post();
@@ -200,10 +203,12 @@ class c2c_AdminPostNavigation {
 				$display .= ' ';
 			}
 			$post_title = strip_tags( get_the_title( $next ) );
-			$display .= '<a href="' . get_edit_post_link( $next->ID ) .
-				'" id="admin-post-nav-next" title="' .
-				esc_attr( sprintf( __( 'Next %1$s: %2$s', 'admin-post-navigation' ), $context, $post_title ) ).
-				'" class="admin-post-nav-next add-new-h2">' . self::$next_text . '</a>';
+			$display .= sprintf(
+				'<a href="%s" id="admin-post-nav-next" title="%s" class="admin-post-nav-next add-new-h2">%s</a>',
+				get_edit_post_link( $next->ID ),
+				esc_attr( sprintf( __( 'Next %1$s: %2$s', 'admin-post-navigation' ), $context, $post_title ) ),
+				self::$next_text
+			);
 		}
 
 		$display = '<span id="admin-post-nav">' . $display . '</span>';

@@ -230,6 +230,7 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
 = () =
 * Change: Use `get_the_title()` instead of `the_title_attribute()` to get post titles.
 * Change: Remove pre-WP 4.3 support for JS relocation of prev/next links.
+* Change: Use `sprintf()` to format output markup rather than concatenating strings, variables, and function calls.
 * Change: For unit tests, enable more error output.
 * Change: For unit tests, default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable.
 * Change: Note compatibility through WP 4.7+.
