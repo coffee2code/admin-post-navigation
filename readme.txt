@@ -228,10 +228,12 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
 == Changelog ==
 
 = () =
+* Change: Use `get_the_title()` instead of `the_title_attribute()` to get post titles.
 * Change: For unit tests, enable more error output.
 * Change: For unit tests, default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable.
 * Change: Note compatibility through WP 4.7+.
 * Change: Remove support for WordPress older than 4.6 (should still work for earlier versions)
+* Change: Update copyright date (2017).
 
 = 2.0 (2016-01-14) =
 * New: Add support for RTL display.

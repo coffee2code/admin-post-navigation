@@ -32,7 +32,7 @@
  */
 
 /*
-	Copyright (c) 2008-2016 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2008-2017 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -192,7 +192,7 @@ class c2c_AdminPostNavigation {
 
 		$prev = self::previous_post();
 		if ( $prev ) {
-			$post_title = the_title_attribute( array( 'echo' => false, 'post' => $prev->ID ) );
+			$post_title = strip_tags( get_the_title( $prev ) );
 			$display .= '<a href="' . get_edit_post_link( $prev->ID ) . '" id="admin-post-nav-prev" title="' .
 				esc_attr( sprintf( __( 'Previous %1$s: %2$s', 'admin-post-navigation' ), $context, $post_title ) ) .
 				'" class="admin-post-nav-prev add-new-h2">' . self::$prev_text . '</a>';
@@ -203,7 +203,7 @@ class c2c_AdminPostNavigation {
 			if ( $display ) {
 				$display .= ' ';
 			}
-			$post_title = the_title_attribute( array( 'echo' => false, 'post' => $next->ID ) );
+			$post_title = strip_tags( get_the_title( $next ) );
 			$display .= '<a href="' . get_edit_post_link( $next->ID ) .
 				'" id="admin-post-nav-next" title="' .
 				esc_attr( sprintf( __( 'Next %1$s: %2$s', 'admin-post-navigation' ), $context, $post_title ) ).
