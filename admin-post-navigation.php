@@ -138,10 +138,6 @@ class c2c_AdminPostNavigation {
 		wp_enqueue_style( 'admin-post-navigation-admin' );
 
 		wp_register_script( 'admin-post-navigation-admin', plugins_url( 'assets/admin-post-navigation.js', __FILE__ ), array( 'jquery' ), self::version(), true );
-		// Localize script.
-		wp_localize_script( 'admin-post-navigation-admin', 'c2c_apn', array(
-			'tag' => version_compare( $GLOBALS['wp_version'], '4.3', '>=' ) ? 'h1' : 'h2',
-		) );
 		wp_enqueue_script( 'admin-post-navigation-admin' );
 	}
 
