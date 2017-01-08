@@ -234,6 +234,20 @@ class c2c_AdminPostNavigation {
 		return strtolower( $label );
 	}
 
+	public static function is_valid_orderby( $orderby ) {
+		// By default, restrict orderby to actual post fields.
+		$valid = array(
+			'comment_count', 'ID', 'menu_order', 'post_author', 'post_content', 'post_content_filtered',
+			'post_date', 'post_excerpt', 'post_date_gmt', 'post_mime_type', 'post_modified',
+			'post_modified_gmt', 'post_name', 'post_parent', 'post_status', 'post_title', 'post_type',
+		);
+
+		// Filter the value.
+		//$valid = (array) apply_filters( 'c2c_admin_post_navigation_valid_orderbys', $valid );
+
+		return in_array( $orderby, $valid );
+	}
+
 	/**
 	 * Returns the previous or next post relative to the current post.
 	 *

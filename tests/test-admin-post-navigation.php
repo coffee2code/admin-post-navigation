@@ -32,6 +32,36 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 	//
 
 
+	public function valid_orderbys() {
+		return array(
+			array( 'comment_count' ),
+			array( 'ID' ),
+			array( 'menu_order' ),
+			array( 'post_author' ),
+			array( 'post_content' ),
+			array( 'post_content_filtered' ),
+			array( 'post_date' ),
+			array( 'post_excerpt' ),
+			array( 'post_date_gmt' ),
+			array( 'post_mime_type' ),
+			array( 'post_modified' ),
+			array( 'post_modified_gmt' ),
+			array( 'post_name' ),
+			array( 'post_parent' ),
+			array( 'post_status' ),
+			array( 'post_title' ),
+			array( 'post_type' ),
+		);
+	}
+
+	public function invalid_orderbys() {
+		return array(
+			array( 'title' ),
+			array( 'id' ),
+			array( 'gibberish' ),
+		);
+	}
+
 
 	//
 	//
@@ -238,6 +268,25 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 		$previous_post = c2c_AdminPostNavigation::previous_post();
 
 		$this->assertEquals( get_post( $posts[4] )->post_title, get_post( $previous_post->ID )->post_title );
+	}
+
+
+	/*
+	 * c2c_AdminPostNavigation::is_valid_orderby()
+	 */
+
+	/**
+	 * @dataProvider valid_orderbys
+	 */
+	public function test_is_valid_orderby_with_valid( $orderby ) {
+		$this->assertTrue( c2c_AdminPostNavigation::is_valid_orderby( $orderby ) );
+	}
+
+	/**
+	 * @dataProvider invalid_orderbys
+	 */
+	public function test_is_valid_orderby_with_invalid( $orderby ) {
+		$this->assertFalse( c2c_AdminPostNavigation::is_valid_orderby( $orderby ) );
 	}
 
 
