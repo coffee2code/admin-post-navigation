@@ -234,6 +234,16 @@ class c2c_AdminPostNavigation {
 		return strtolower( $label );
 	}
 
+	/**
+	 * Determines if a given orderby field value is valid.
+	 *
+	 * Only post table fields are valid.
+	 *
+	 * @since 2.1
+	 *
+	 * @param string $orderby The orderby.
+	 * @return bool. True if valid, false if not.
+	 */
 	public static function is_valid_orderby( $orderby ) {
 		// By default, restrict orderby to actual post fields.
 		$valid = array(
@@ -248,6 +258,14 @@ class c2c_AdminPostNavigation {
 		return in_array( $orderby, $valid );
 	}
 
+	/**
+	 * Determiens the orderby value to use for a given post type.
+	 *
+	 * @since 2.1
+	 *
+	 * @param string $post_type The post type.
+	 * @return string
+	 */
 	public static function get_post_type_orderby( $post_type ) {
 		if ( is_post_type_hierarchical( $post_type ) ) {
 			$orderby = 'post_title';
