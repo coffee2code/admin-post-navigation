@@ -291,6 +291,17 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 
 
 	/*
+	 * c2c_AdminPostNavigation::get_post_type_orderby()
+	 */
+
+
+	public function test_get_post_type_orderby() {
+		$this->assertEquals( 'post_title', c2c_AdminPostNavigation::get_post_type_orderby( 'page' ) );
+		$this->assertEquals( 'post_date', c2c_AdminPostNavigation::get_post_type_orderby( 'post' ) );
+	}
+
+
+	/*
 	 * Filters.
 	 */
 
