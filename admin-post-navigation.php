@@ -281,7 +281,8 @@ class c2c_AdminPostNavigation {
 			$orderby = $default_orderby;
 		}
 
-		$sql .= "AND {$orderby} {$type} '{$post->$orderby}' ";
+		$datatype = in_array( $orderby, array( 'comment_count', 'ID', 'menu_order', 'post_parent' ) ) ? '%d' : '%s';
+		$sql .= $wpdb->prepare( "AND {$orderby} {$type} {$datatype} ", $post->$orderby );
 
 		$sort = $type == '<' ? 'DESC' : 'ASC';
 		$sql .= "ORDER BY {$orderby} {$sort} LIMIT {$offset}, {$limit}";

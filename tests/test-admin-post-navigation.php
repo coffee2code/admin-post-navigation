@@ -20,6 +20,7 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 
 		remove_filter( 'c2c_admin_post_navigation_post_statuses', array( $this, 'c2c_admin_post_navigation_post_statuses' ), 10, 3 );
 		remove_filter( 'c2c_admin_post_navigation_orderby',       array( $this, 'c2c_admin_post_navigation_orderby' ), 10, 2 );
+		remove_filter( 'c2c_admin_post_navigation_orderby',       array( $this, 'c2c_admin_post_navigation_orderby_title' ), 10, 2 );
 		remove_filter( 'c2c_admin_post_navigation_orderby',       array( $this, 'c2c_admin_post_navigation_orderby_bad_value' ), 10, 2 );
 	}
 
@@ -95,6 +96,10 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 
 	public function c2c_admin_post_navigation_orderby( $orderby, $post_type ) {
 		return 'post_date';
+	}
+
+	public function c2c_admin_post_navigation_orderby_title( $orderby, $post_type ) {
+		return 'post_title';
 	}
 
 	public function c2c_admin_post_navigation_orderby_bad_value( $orderby, $post_type ) {
@@ -205,6 +210,34 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 		$previous_post = c2c_AdminPostNavigation::previous_post();
 
 		$this->assertEmpty( $previous_post );
+	}
+
+	public function test_navigate_by_post_title_on_posts_with_quotes_in_title() {
+		add_filter( 'c2c_admin_post_navigation_orderby', array( $this, 'c2c_admin_post_navigation_orderby_title' ), 10, 2 );
+
+		$posts = $this->create_posts();
+
+		// Change post titles so post ordering by title is 3, 0, 2, 4, 1
+		$new_post_titles = array(
+			"Don't wake the dragon",
+			'A very good post',
+			"Can you 'dig' it?",
+			'Everything must come to an end',
+			'Be a good person',
+		);
+		foreach ( $new_post_titles as $i => $title ) {
+			$post = get_post( $posts[ $i ] );
+			$post->post_title = $title;
+			wp_update_post( $post );
+		}
+
+		$next_post = c2c_AdminPostNavigation::next_post();
+
+		$this->assertEquals( get_post( $posts[0] )->post_title, get_post( $next_post->ID )->post_title );
+
+		$previous_post = c2c_AdminPostNavigation::previous_post();
+
+		$this->assertEquals( get_post( $posts[4] )->post_title, get_post( $previous_post->ID )->post_title );
 	}
 
 
