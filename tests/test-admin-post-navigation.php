@@ -9,7 +9,7 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		c2c_AdminPostNavigation::register_post_page_hooks();
+		do_action( 'load-post.php' );
 	}
 
 	public function tearDown() {
