@@ -300,6 +300,34 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 		$this->assertEquals( 'post_date', c2c_AdminPostNavigation::get_post_type_orderby( 'post' ) );
 	}
 
+	public function test_get_post_type_orderby_for_user_with_no_saved_screen_option() {
+		$user_id = $this->create_user( 'administrator' );
+
+		$this->assertEquals( 'post_title', c2c_AdminPostNavigation::get_post_type_orderby( 'page', $user_id ) );
+		$this->assertEquals( 'post_date', c2c_AdminPostNavigation::get_post_type_orderby( 'post', $user_id ) );
+	}
+
+	public function test_get_post_type_orderby_for_user_with_saved_screen_option() {
+		$user_id = $this->create_user( 'administrator' );
+		add_user_meta( $user_id, c2c_AdminPostNavigation::get_setting_name( 'page' ), 'ID', true );
+
+		$this->assertEquals( 'ID', c2c_AdminPostNavigation::get_post_type_orderby( 'page', $user_id ) );
+		// Ensure it doesn't affect value for other post types.
+		$this->assertEquals( 'post_date', c2c_AdminPostNavigation::get_post_type_orderby( 'post', $user_id ) );
+	}
+
+
+	/*
+	 * c2c_AdminPostNavigation::get_setting_name()
+	 */
+
+
+	public function test_get_setting_name() {
+		$this->assertEquals( 'c2c_apn_page_orderby', c2c_AdminPostNavigation::get_setting_name( 'page' ) );
+		$this->assertEquals( 'c2c_apn_post_orderby', c2c_AdminPostNavigation::get_setting_name( 'post' ) );
+		$this->assertEquals( 'c2c_apn_book_orderby', c2c_AdminPostNavigation::get_setting_name( 'book' ) );
+	}
+
 
 	/*
 	 * Filters.

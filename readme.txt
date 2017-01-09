@@ -15,9 +15,11 @@ Adds links to navigate to the next and previous posts when editing a post in the
 
 This plugin adds "&larr; Previous" and "Next &rarr;" links to the "Edit Post" admin page if a previous and next post are present, respectively. The link titles (visible when hovering over the links) reveal the title of the previous/next post. The links link to the "Edit Post" admin page for the previous/next posts so that you may edit them.
 
-By default, a previous/next post is determined by the next lower/higher valid post based on relative sequential post ID and which the user can edit. Other post criteria such as post type (draft, pending, etc), publish date, post author, category, etc, are not taken into consideration when determining the previous or next post. How posts are navigated, and post types and post statuses to restrict navigation can be customized via filters (see Filters section).
+By default, a previous/next post is determined by the next lower/higher valid post based on the date the post was created and which is also a post the user can edit. Other post criteria such as post type (draft, pending, etc), publish date, post author, category, etc, are not taken into consideration when determining the previous or next post.
 
-NOTE: Be sure to save the post currently being edited before navigating away to the previous/next post.
+Users can customize how post navigation ordering is handled via the "Screen Options" panel available at the top of every page when editing a post. A dropdown presents options to order navigation by: 'ID', 'menu_order', 'post_date', 'post_modified', 'post_name', and 'post_title'. Post navigation can further be customized via filters (see Filters section).
+
+NOTE: Be sure to save the post currently being edited before navigating away to the previous/next post!
 
 Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-post-navigation/) | [Plugin Directory Page](https://wordpress.org/plugins/admin-post-navigation/) | [Author Homepage](http://coffee2code.com)
 
@@ -48,36 +50,39 @@ Yes. See the Filters section for the `c2c_admin_post_navigation_prev_text` and/o
 
 == Filters ==
 
-The plugin is further customizable via six filters. Typically, these customizations would be put into your active theme's functions.php file, or used by another plugin.
+The plugin is further customizable via six filters. Such code should ideally be put into a mu-plugin or site-specific plugin (which is beyond the scope of this readme to explain).
 
 = c2c_admin_post_navigation_orderby (filter) =
 
-The 'c2c_admin_post_navigation_orderby' filter allows you to change the post field used in the ORDER BY clause for the SQL to find the previous/next post. By default this is 'ID' for non-hierarchical post types (such as posts) and 'post_title' for hierarchical post types (such as pages). If you wish to change this, hook this filter. This is not typical usage for most users.
+The 'c2c_admin_post_navigation_orderby' filter allows you to change the post field used in the ORDER BY clause for the SQL to find the previous/next post. By default this is 'post_date' for non-hierarchical post types (such as posts) and 'post_title' for hierarchical post types (such as pages). If you wish to change this, hook this filter. Note: users can customize the post navigation order field for themselves on a per-post type basis via "Screen Options" (see FAQ and screenshot for more info).
 
 Arguments:
 
 * $field (string) The current ORDER BY field
 * $post_type (string) The post type being navigated
+* $user_id (int) The user's ID
 
 Example:
 
 `
 /**
- * Modify how Admin Post Navigation orders posts for navigation by ordering
- * pages by 'menu_order' and posts by 'post_date'.
+ * Modify how Admin Post Navigation orders posts for navigation by changing the
+ * ordering of pages by 'menu_order'.
  *
  * @param string $field     The field used to order posts for navigation.
  * @param string $post_type The post type being navigated.
+ * @param int    $user_id.  The user's ID.
  * @return string
  */
-function custom_order_apn( $field, $post_type ) {
+function custom_order_apn( $field, $post_type, $user_id ) {
+	// Only change the order for the 'page' post type.
 	if ( 'page' === $post_type ) {
-		return 'menu_order';
-	} else {
-		return 'post_date';
+		$field = 'menu_order';
 	}
+
+	return $field;
 }
-add_filter( 'c2c_admin_post_navigation_orderby', 'custom_order_apn', 10, 2 );
+add_filter( 'c2c_admin_post_navigation_orderby', 'custom_order_apn', 10, 3 );
 `
 
 = c2c_admin_post_navigation_post_statuses (filter) =
@@ -228,6 +233,12 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
 == Changelog ==
 
 = () =
+* New: Add ability for users to customize the navigation order via a Screen Options dropdown.
+    * Add optional `$user_id` arg to `get_post_type_orderby()`, and use it, to take into account user preference.
+    * Add `$user_id` arg to 'c2c_admin_post_navigation_orderby' filter.
+    * Add `get_setting_name()` helper function for getting the setting name for the given post type.
+    * Add `screen_settings()` to output the dropdown.
+    * Add `save_screen_settings() to save user's preference.
 * Fix: Resolve issue where navigation links failed to appear on posts with an apostrophe in their titles.
 * New: Add `is_valid_orderby()` helper function to verify a given orderby value is valid.
 * New: Abstract logic for determining the orderby for a given post type into `get_post_type_orderby()`.
@@ -398,6 +409,9 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
 
 
 == Upgrade Notice ==
+
+= 2.1 =
+Recommended update: added screen option for users to customize post navigation order for each post type, fixed bug where navigation didn't appear for posts with apostrophe in title, updated unit test bootstrap file, noted compatibility is now WP 4.6-4.7+, and updated copyright date (2017)
 
 = 2.0 =
 Recommended update: added RTL support, moved CSS & JS into enqueueable files, enabled navigation for media files, adjustments to utilize language packs, minor unit test tweaks, noted compatibility through WP 4.4+, and updated copyright date

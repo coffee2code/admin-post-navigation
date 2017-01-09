@@ -74,6 +74,19 @@ class c2c_AdminPostNavigation {
 	private static $next_text = '';
 
 	/**
+	 * Post fields available as orderby options.
+	 *
+	 * Note: not meant to be an exhaustive list, just the ones available to users
+	 * via dropdown in Screen Options panel.
+	 *
+	 * @access private
+	 * @since 2.1
+	 *
+	 * @var array
+	 */
+	private static $orderby_fields = array( 'ID', 'menu_order', 'post_date', 'post_modified', 'post_name', 'post_title' );
+
+	/**
 	 * Default post statuses for navigation.
 	 *
 	 * Filterable later.
@@ -106,7 +119,8 @@ class c2c_AdminPostNavigation {
 	 * Class constructor: initializes class variables and adds actions and filters.
 	 */
 	public static function init() {
-		add_action( 'load-post.php', array( __CLASS__, 'register_post_page_hooks' ) );
+		add_filter( 'set-screen-option', array( __CLASS__, 'save_screen_settings' ), 10, 3 );
+		add_action( 'load-post.php',     array( __CLASS__, 'register_post_page_hooks' ) );
 	}
 
 	/**
@@ -126,6 +140,9 @@ class c2c_AdminPostNavigation {
 		// Register hooks.
 		add_action( 'admin_enqueue_scripts',      array( __CLASS__, 'admin_enqueue_scripts_and_styles' ) );
 		add_action( 'do_meta_boxes',              array( __CLASS__, 'do_meta_box' ), 10, 3 );
+
+		// Screen options.
+		add_filter( 'screen_settings',            array( __CLASS__, 'screen_settings' ), 10, 2 );
 	}
 
 	/**
@@ -139,6 +156,58 @@ class c2c_AdminPostNavigation {
 
 		wp_register_script( 'admin-post-navigation-admin', plugins_url( 'assets/admin-post-navigation.js', __FILE__ ), array( 'jquery' ), self::version(), true );
 		wp_enqueue_script( 'admin-post-navigation-admin' );
+	}
+
+	/**
+	 * Outputs screen settings.
+	 *
+	 * @since 2.1
+	 *
+	 * @param string    $screen_settings Screen settings markup.
+	 * @param WP_Screen $screen          WP_Screen object.
+	 * @return string
+	 */
+	public static function screen_settings( $screen_settings, $screen ) {
+		if ( 'post' !== $screen->id ) {
+			return $screen_options;
+		}
+
+		$option = self::get_setting_name( $screen->post_type );
+		$value  = self::get_post_type_orderby( $screen->post_type, get_current_user_id() );
+
+		$screen_settings .= '<fieldset class="">'
+			. '<legend>' . __( 'Admin Post Navigation', 'admin-post-navigation' ) . '</legend>'
+			. '<input type="hidden" name="wp_screen_options[option]" value="' . $option . '" />'
+			. '<label for="' . $option . '">'
+			. sprintf( __( 'Navigation order for this post type (%s)', 'admin-post-navigation' ), $screen->post_type )
+			. ' <select name="wp_screen_options[value]">';
+		foreach ( self::$orderby_fields as $orderby ) {
+			$screen_settings .= '<option value="' . $orderby . '" ' . selected( $value, $orderby, false ) . '>' . $orderby . '</option>';
+		}
+		$screen_settings .= '</select>'
+			. '</label>'
+			. get_submit_button( __( 'Apply', 'admin-post-navigation' ), 'button', 'screen-options-apply', false )
+			. '</fieldset>';
+
+		return $screen_settings;
+	}
+
+	/**
+	 * Saves screen option values.
+	 *
+	 * @since 2.1
+	 *
+	 * @param bool|int $status Screen option value. Default false to skip.
+	 * @param string   $option The option name.
+	 * @param int      $value  The number of rows to use.
+	 * @return bool|string
+	 */
+	public static function save_screen_settings( $status, $option, $value ) {
+		if ( 'c2c_apn_' == substr( $option, 0, 8 ) ) {
+			$status = $value;
+		}
+
+		return $status;
 	}
 
 	/**
@@ -235,6 +304,19 @@ class c2c_AdminPostNavigation {
 	}
 
 	/**
+	 * Returns the name of the screen option setting for the orderby setting for
+	 * the given post type.
+	 *
+	 * @since 2.1
+	 *
+	 * @param string $post_type The post type.
+	 * @return string
+	 */
+	public static function get_setting_name( $post_type ) {
+		return 'c2c_apn_' . $post_type . '_orderby';
+	}
+
+	/**
 	 * Determines if a given orderby field value is valid.
 	 *
 	 * Only post table fields are valid.
@@ -264,17 +346,27 @@ class c2c_AdminPostNavigation {
 	 * @since 2.1
 	 *
 	 * @param string $post_type The post type.
+	 * @param int.   $user_id.  Optional. User ID of user, to account for the
+	 *                          value the set via screen options.
 	 * @return string
 	 */
-	public static function get_post_type_orderby( $post_type ) {
+	public static function get_post_type_orderby( $post_type, $user_id = false ) {
 		if ( is_post_type_hierarchical( $post_type ) ) {
 			$orderby = 'post_title';
 		} else {
 			$orderby = 'post_date';
 		}
 
+		// Get user-selected order for this post type.
+		if ( $user_id ) {
+			$user_orderby = get_user_meta( $user_id, self::get_setting_name( $post_type ), true );
+			if ( $user_orderby && self::is_valid_orderby( $user_orderby ) ) {
+				$orderby = $user_orderby;
+			}
+		}
+
 		// Filter orderby value.
-		$filter_orderby = apply_filters( 'c2c_admin_post_navigation_orderby', $orderby, $post_type );
+		$filter_orderby = apply_filters( 'c2c_admin_post_navigation_orderby', $orderby, $post_type, $user_id );
 		if ( $filter_orderby && self::is_valid_orderby( $filter_orderby ) ) {
 			$orderby = $filter_orderby;
 		}
@@ -317,7 +409,7 @@ class c2c_AdminPostNavigation {
 		$sql = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type = '$post_type' AND post_status IN (" . self::$post_statuses_sql . ') ';
 
 		// Determine order.
-		$orderby = self::get_post_type_orderby( $post_type );
+		$orderby = self::get_post_type_orderby( $post_type, get_current_user_id() );
 
 		$datatype = in_array( $orderby, array( 'comment_count', 'ID', 'menu_order', 'post_parent' ) ) ? '%d' : '%s';
 		$sql .= $wpdb->prepare( "AND {$orderby} {$type} {$datatype} ", $post->$orderby );
