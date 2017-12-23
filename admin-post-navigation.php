@@ -169,7 +169,7 @@ class c2c_AdminPostNavigation {
 	 */
 	public static function screen_settings( $screen_settings, $screen ) {
 		if ( 'post' !== $screen->id ) {
-			return $screen_options;
+			return $screen_settings;
 		}
 
 		$option = self::get_setting_name( $screen->post_type );
