@@ -341,16 +341,20 @@ class c2c_AdminPostNavigation {
 	}
 
 	/**
-	 * Determiens the orderby value to use for a given post type.
+	 * Determiens the orderby value to use for a given post type's navigation.
 	 *
 	 * @since 2.1
 	 *
 	 * @param string $post_type The post type.
-	 * @param int.   $user_id.  Optional. User ID of user, to account for the
+	 * @param int    $user_id.  Optional. User ID of user, to account for the
 	 *                          value the set via screen options.
 	 * @return string
 	 */
 	public static function get_post_type_orderby( $post_type, $user_id = false ) {
+		if ( ! $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
 		if ( is_post_type_hierarchical( $post_type ) ) {
 			$orderby = 'post_title';
 		} else {
@@ -409,7 +413,7 @@ class c2c_AdminPostNavigation {
 		$sql = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type = '$post_type' AND post_status IN (" . self::$post_statuses_sql . ') ';
 
 		// Determine order.
-		$orderby = self::get_post_type_orderby( $post_type, get_current_user_id() );
+		$orderby = self::get_post_type_orderby( $post_type );
 
 		$datatype = in_array( $orderby, array( 'comment_count', 'ID', 'menu_order', 'post_parent' ) ) ? '%d' : '%s';
 		$sql .= $wpdb->prepare( "AND {$orderby} {$type} {$datatype} ", $post->$orderby );
