@@ -177,7 +177,7 @@ class c2c_AdminPostNavigation {
 
 		$screen_settings .= '<fieldset class="">'
 			. '<legend>' . __( 'Admin Post Navigation', 'admin-post-navigation' ) . '</legend>'
-			. '<input type="hidden" name="wp_screen_options[option]" value="' . $option . '" />'
+			. '<input type="hidden" name="wp_screen_options[option]" value="' . $option . '" />' . "\n";
 			. '<label for="' . $option . '">'
 			. sprintf( __( 'Navigation order for this post type (%s)', 'admin-post-navigation' ), $screen->post_type )
 			. ' <select name="wp_screen_options[value]">';
@@ -185,7 +185,7 @@ class c2c_AdminPostNavigation {
 			$screen_settings .= '<option value="' . $orderby . '" ' . selected( $value, $orderby, false ) . '>' . $orderby . '</option>';
 		}
 		$screen_settings .= '</select>'
-			. '</label>'
+			. '</label>' . "\n";
 			. get_submit_button( __( 'Apply', 'admin-post-navigation' ), 'button', 'screen-options-apply', false )
 			. '</fieldset>';
 
