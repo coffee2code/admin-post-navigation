@@ -95,7 +95,7 @@ class c2c_AdminPostNavigation {
 	 *
 	 * @var array
 	 */
-	private static $post_statuses = array( 'draft', 'future', 'pending', 'private', 'publish', 'inherit' );
+	private static $post_statuses = array( 'draft', 'future', 'pending', 'private', 'publish' );
 
 	/**
 	 * Post status query fragment.
