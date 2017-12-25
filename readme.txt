@@ -101,25 +101,29 @@ Example:
 /**
  * Modify Admin Post Navigation to allow and disallow certain post statuses from being navigated.
  *
- * @param array $post_statuses Post statuses permitted for admin navigation.
+ * @param array  $post_statuses Post statuses permitted for admin navigation.
+ * @param string $post_type     The post type.
  * @return array
  */
-function change_apn_post_status( $post_statuses ) {
+function change_apn_post_status( $post_statuses, $post_type ) {
 	// Add a post status.
 	// Note: by default these are already in the $post_statuses array: 'draft', 'future', 'pending', 'private', 'publish'
 	$post_statuses[] = 'trash';
 
 	// Remove post status(es).
 	$post_statuses_to_remove = array( 'draft' ); // Customize here.
+	if ( 'page' === $post_type ) {
+		$post_statuses_to_remove[] = 'pending';
+	}
 	foreach ( $post_statuses_to_remove as $remove ) {
 		if ( false !== $index = array_search( $remove, $post_statuses ) ) {
 			unset( $post_statuses[ $index ] );
 		}
 	}
 
-	return $post_statuses;
+	return array_values( $post_statuses );
 }
-add_filter( 'c2c_admin_post_navigation_post_statuses', 'change_apn_post_status' );
+add_filter( 'c2c_admin_post_navigation_post_statuses', 'change_apn_post_status', 10, 2 );
 `
 
 = c2c_admin_post_navigation_post_types (filter) =
