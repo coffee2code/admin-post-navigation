@@ -258,6 +258,7 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
 * Change: Note compatibility through WP 4.9+.
 * Change: Remove support for WordPress older than 4.7 (should still work for earlier versions)
 * Change: Update copyright date (2018).
+* Change: Minor whitespace tweaks in unit test bootstrap
 
 = 2.0 (2016-01-14) =
 * New: Add support for RTL display.
