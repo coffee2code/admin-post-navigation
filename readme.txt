@@ -255,7 +255,7 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
 * Change: For unit tests, default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable.
 * Change: Note compatibility through WP 4.9+.
 * Change: Remove support for WordPress older than 4.7 (should still work for earlier versions)
-* Change: Update copyright date (2017).
+* Change: Update copyright date (2018).
 
 = 2.0 (2016-01-14) =
 * New: Add support for RTL display.
