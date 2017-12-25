@@ -180,7 +180,7 @@ class c2c_AdminPostNavigation {
 
 		$screen_settings .= '<fieldset class="">'
 			. '<legend>' . __( 'Admin Post Navigation', 'admin-post-navigation' ) . '</legend>'
-			. '<input type="hidden" name="wp_screen_options[option]" value="' . $option . '" />' . "\n";
+			. '<input type="hidden" name="wp_screen_options[option]" value="' . $option . '" />' . "\n"
 			. '<label for="' . $option . '">'
 			. sprintf( __( 'Navigation order for this post type (%s)', 'admin-post-navigation' ), $screen->post_type )
 			. ' <select name="wp_screen_options[value]">';
@@ -188,7 +188,7 @@ class c2c_AdminPostNavigation {
 			$screen_settings .= '<option value="' . $orderby . '" ' . selected( $value, $orderby, false ) . '>' . $orderby . '</option>';
 		}
 		$screen_settings .= '</select>'
-			. '</label>' . "\n";
+			. '</label>' . "\n"
 			. get_submit_button( __( 'Apply', 'admin-post-navigation' ), 'button', 'screen-options-apply', false )
 			. '</fieldset>';
 
@@ -360,12 +360,12 @@ class c2c_AdminPostNavigation {
 	}
 
 	/**
-	 * Determiens the orderby value to use for a given post type's navigation.
+	 * Determines the orderby value to use for a given post type's navigation.
 	 *
 	 * @since 2.1
 	 *
 	 * @param string $post_type The post type.
-	 * @param int    $user_id.  Optional. User ID of user, to account for the
+	 * @param int    $user_id   Optional. User ID of user, to account for the
 	 *                          value the set via screen options.
 	 * @return string
 	 */
