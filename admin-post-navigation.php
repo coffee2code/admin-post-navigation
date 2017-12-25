@@ -24,11 +24,14 @@
 /*
  * TODO:
  * - Add ability for navigation to save current post before navigating away.
- * - Hide screen option checkbox for metabox if metabox is being hidden
  * - Add screen option allowing user selection of post navigation order
  * - Add more unit tests
  * - Add dropdown to post nav links to allow selecting different types of things
  *   to navigate to (e.g. next draft (if looking at a draft), next in category X)
+ * - When navigating via menu_order, respect hierarchy and navigate siblings.
+ * - Add filter to allow customizing the list of orderby options in screen options?
+ * - Add post status as series of checkboxes in Screen Options
+ * - Add support for secondary orderby
  */
 
 /*
