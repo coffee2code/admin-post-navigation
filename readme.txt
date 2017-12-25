@@ -92,6 +92,8 @@ The 'c2c_admin_post_navigation_post_statuses' filter allows you to modify the li
 Arguments:
 
 * $post_statuses (array) The array of valid post_statuses
+* $post_type (string) The post type
+* $user_id (int) The ID of the current user
 
 Example:
 
