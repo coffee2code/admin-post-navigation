@@ -248,6 +248,7 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
 * Fix: Resolve issue where navigation links failed to appear on posts with an apostrophe in their titles.
 * New: Add `is_valid_orderby()` helper function to verify a given orderby value is valid.
 * New: Abstract logic for determining the orderby for a given post type into `get_post_type_orderby()`.
+* New: Add README.md.
 * Change: Use `get_the_title()` instead of `the_title_attribute()` to get post titles.
 * Change: Remove pre-WP 4.3 support for JS relocation of prev/next links.
 * Change: Use `sprintf()` to format output markup rather than concatenating strings, variables, and function calls.
