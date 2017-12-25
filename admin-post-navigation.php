@@ -224,8 +224,7 @@ class c2c_AdminPostNavigation {
 	 * @param WP_Post $post      The post.
 	 */
 	public static function do_meta_box( $post_type, $type, $post ) {
-		$post_types = apply_filters( 'c2c_admin_post_navigation_post_types', get_post_types() );
-		if ( ! in_array( $post_type, $post_types ) ) {
+		if ( ! self::is_post_type_navigable( $post_type ) ) {
 			return;
 		}
 
@@ -317,6 +316,23 @@ class c2c_AdminPostNavigation {
 	 */
 	public static function get_setting_name( $post_type ) {
 		return 'c2c_apn_' . $post_type . '_orderby';
+	}
+
+	/**
+	 * Determines if a post type has admin navigation enabled.
+	 *
+	 * By default, the navigation is enabled for all post types. Filter
+	 * 'c2c_admin_post_navigation_post_types' to limit its use.
+	 *
+	 * @since 2.1
+	 *
+	 * @param string $post_type The post type.
+	 * @return bool  True if post type has admin navigation enabled, else false.
+	 */
+	public static function is_post_type_navigable( $post_type ) {
+		$post_types = (array) apply_filters( 'c2c_admin_post_navigation_post_types', get_post_types() );
+
+		return in_array( $post_type, $post_types );
 	}
 
 	/**
