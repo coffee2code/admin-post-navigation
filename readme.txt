@@ -21,7 +21,7 @@ Users can customize how post navigation ordering is handled via the "Screen Opti
 
 NOTE: Be sure to save the post currently being edited before navigating away to the previous/next post!
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-post-navigation/) | [Plugin Directory Page](https://wordpress.org/plugins/admin-post-navigation/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-post-navigation/) | [Plugin Directory Page](https://wordpress.org/plugins/admin-post-navigation/) | [GitHub](https://github.com/coffe2code/admin-post-navigation/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -253,6 +253,7 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
 * Change: Use `sprintf()` to format output markup rather than concatenating strings, variables, and function calls.
 * Change: For unit tests, enable more error output.
 * Change: For unit tests, default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable.
+* Change: Add GitHub link to readme.
 * Change: Note compatibility through WP 4.9+.
 * Change: Remove support for WordPress older than 4.7 (should still work for earlier versions)
 * Change: Update copyright date (2018).
