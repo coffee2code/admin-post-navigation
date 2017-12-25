@@ -171,7 +171,7 @@ class c2c_AdminPostNavigation {
 	 * @return string
 	 */
 	public static function screen_settings( $screen_settings, $screen ) {
-		if ( ! empty( $screen->post_type ) && ! self::is_post_type_navigable( $screen->post_type ) ) {
+		if ( empty( $screen->post_type ) || ! self::is_post_type_navigable( $screen->post_type ) ) {
 			return $screen_settings;
 		}
 
