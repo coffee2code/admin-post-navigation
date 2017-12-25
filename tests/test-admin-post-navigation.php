@@ -105,23 +105,26 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 		return $posts;
 	}
 
-	public function c2c_admin_post_navigation_post_statuses( $post_statuses, $post_type, $post ) {
+	public function c2c_admin_post_navigation_post_statuses( $post_statuses, $post_type, $user_id ) {
 		$this->assertTrue( is_array( $post_statuses ) );
-		$this->assertEquals( 'post', $post_type );
-		$this->assertTrue( is_a( $post, 'WP_Post' ) );
+		$this->assertTrue( is_string( $post_type ) );
+		$this->assertTrue( is_int( $user_id ) || false === $user_id );
 
 		// Add a post status.
 		$post_statuses[] = 'trash';
 
 		// Remove post status.
 		$post_statuses_to_remove = array( 'draft' );
+		if ( 'page' === $post_type ) {
+			$post_statuses_to_remove[] = 'pending';
+		}
 		foreach ( $post_statuses_to_remove as $remove ) {
 			if ( false !== $index = array_search( $remove, $post_statuses ) ) {
 				unset( $post_statuses[ $index ] );
 			}
 		}
 
-		return $post_statuses;
+		return array_values( $post_statuses );
 	}
 
 	public function c2c_admin_post_navigation_orderby( $orderby, $post_type ) {
@@ -347,9 +350,9 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 	}
 
 	public function test_filter_c2c_admin_post_navigation_post_statuses_when_adding_post_status() {
-		add_filter( 'c2c_admin_post_navigation_post_statuses', array( $this, 'c2c_admin_post_navigation_post_statuses' ), 10, 3 );
-
 		$posts = $this->create_posts();
+
+		add_filter( 'c2c_admin_post_navigation_post_statuses', array( $this, 'c2c_admin_post_navigation_post_statuses' ), 10, 3 );
 
 		$post = get_post( $posts[3] );
 		$post->post_status = 'trash';
@@ -361,9 +364,9 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 	}
 
 	public function test_filter_c2c_admin_post_navigation_post_statuses_when_removing_post_status() {
-		add_filter( 'c2c_admin_post_navigation_post_statuses', array( $this, 'c2c_admin_post_navigation_post_statuses' ), 10, 3 );
-
 		$posts = $this->create_posts();
+
+		add_filter( 'c2c_admin_post_navigation_post_statuses', array( $this, 'c2c_admin_post_navigation_post_statuses' ), 10, 3 );
 
 		$post = get_post( $posts[3] );
 		$post->post_status = 'draft';
