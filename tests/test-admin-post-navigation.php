@@ -105,10 +105,9 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 		return $posts;
 	}
 
-	public function c2c_admin_post_navigation_post_statuses( $post_statuses, $post_type, $user_id ) {
+	public function c2c_admin_post_navigation_post_statuses( $post_statuses, $post_type ) {
 		$this->assertTrue( is_array( $post_statuses ) );
 		$this->assertTrue( is_string( $post_type ) );
-		$this->assertTrue( is_int( $user_id ) || false === $user_id );
 
 		// Add a post status.
 		$post_statuses[] = 'trash';
@@ -352,11 +351,11 @@ class Admin_Post_Navigation_Test extends WP_UnitTestCase {
 	public function test_filter_c2c_admin_post_navigation_post_statuses_when_adding_post_status() {
 		$posts = $this->create_posts();
 
-		add_filter( 'c2c_admin_post_navigation_post_statuses', array( $this, 'c2c_admin_post_navigation_post_statuses' ), 10, 3 );
+		add_filter( 'c2c_admin_post_navigation_post_statuses', array( $this, 'c2c_admin_post_navigation_post_statuses' ), 10, 2 );
 
 		$post = get_post( $posts[3] );
-		$post->post_status = 'trash';
-		wp_update_post( $post );
+		wp_trash_post( $post->ID );
+		$post = get_post( $posts[2] );
 
 		$next_post = c2c_AdminPostNavigation::next_post();
 

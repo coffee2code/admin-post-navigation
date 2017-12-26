@@ -101,15 +101,6 @@ class c2c_AdminPostNavigation {
 	private static $post_statuses = array( 'draft', 'future', 'pending', 'private', 'publish' );
 
 	/**
-	 * Post status query fragment.
-	 *
-	 * @access private
-	 *
-	 * @var string
-	 */
-	private static $post_statuses_sql = '';
-
-	/**
 	 * Returns version of the plugin.
 	 *
 	 * @since 1.7
@@ -228,11 +219,7 @@ class c2c_AdminPostNavigation {
 			return;
 		}
 
-		$post_statuses = (array) apply_filters( 'c2c_admin_post_navigation_post_statuses', self::$post_statuses, $post_type, $post );
-		if ( $post_statuses ) {
-			foreach( $post_statuses as $i => $v ) { $GLOBALS['wpdb']->escape_by_ref( $v ); $post_statuses[ $i ] = $v; }
-			self::$post_statuses_sql = "'" . implode( "', '", $post_statuses ) . "'";
-		}
+		$post_statuses = self::get_post_statuses( $post_type );
 
 		if ( in_array( $post->post_status, $post_statuses ) ) {
 			add_meta_box(
@@ -398,6 +385,18 @@ class c2c_AdminPostNavigation {
 	}
 
 	/**
+	 * Returns the post statuses valid for navigation of the post type.
+	 *
+	 * @since 2.1
+	 *
+	 * @param string $post_type The post type.
+	 * @return array
+	 */
+	public static function get_post_statuses( $post_type ) {
+		return (array) apply_filters( 'c2c_admin_post_navigation_post_statuses', self::$post_statuses, $post_type );
+	}
+
+	/**
 	 * Returns the previous or next post relative to the current post.
 	 *
 	 * Currently, a previous/next post is determined by the next lower/higher
@@ -423,13 +422,18 @@ class c2c_AdminPostNavigation {
 
 		$post = get_post( $post_ID );
 
-		if ( ! $post || ! self::$post_statuses_sql ) {
+		$post_type = esc_sql( get_post_type( $post->ID ) );
+
+		$post_statuses = self::get_post_statuses( $post_type );
+
+		if ( ! $post || ! $post_statuses ) {
 			return false;
 		}
 
-		$post_type = esc_sql( get_post_type( $post_ID ) );
+		foreach( $post_statuses as $i => $v ) { $GLOBALS['wpdb']->escape_by_ref( $v ); $post_statuses[ $i ] = $v; }
+		$post_statuses_sql = "'" . implode( "', '", $post_statuses ) . "'";
 
-		$sql = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type = '$post_type' AND post_status IN (" . self::$post_statuses_sql . ') ';
+		$sql = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type = '$post_type' AND post_status IN (" . $post_statuses_sql . ') ';
 
 		// Determine order.
 		$orderby = self::get_post_type_orderby( $post_type );

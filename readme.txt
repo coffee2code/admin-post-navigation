@@ -93,7 +93,6 @@ Arguments:
 
 * $post_statuses (array) The array of valid post_statuses
 * $post_type (string) The post type
-* $user_id (int) The ID of the current user
 
 Example:
 
@@ -247,10 +246,12 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
     * Add `save_screen_settings() to save user's preference.
 * Fix: Resolve issue where navigation links failed to appear on posts with an apostrophe in their titles.
 * New: Add `is_valid_orderby()` helper function to verify a given orderby value is valid.
+* New: Add `get_post_statuses()` for getting post statuses valid for navigation of a given post type.
 * New: Abstract logic for determining the orderby for a given post type into `get_post_type_orderby()`.
 * New: Abstract logic for determining if a post type has admin navigation enabled into `is_post_type_navigable()`.
 * New: Add README.md.
 * Change: Use `get_the_title()` instead of `the_title_attribute()` to get post titles.
+* Change: Discontinue sending `$user_id` arg to 'c2c_admin_post_navigation_post_statuses' filter.
 * Change: Remove pre-WP 4.3 support for JS relocation of prev/next links.
 * Change: Use `sprintf()` to format output markup rather than concatenating strings, variables, and function calls.
 * Change: For unit tests, enable more error output.
