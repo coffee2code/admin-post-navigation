@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Admin Post Navigation
- * Version:     2.0
+ * Version:     2.1
  * Plugin URI:  http://coffee2code.com/wp-plugins/admin-post-navigation/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
@@ -18,7 +18,7 @@
  *
  * @package Admin_Post_Navigation
  * @author  Scott Reilly
- * @version 2.0
+ * @version 2.1
  */
 
 /*
@@ -106,7 +106,7 @@ class c2c_AdminPostNavigation {
 	 * @since 1.7
 	 */
 	public static function version() {
-		return '2.0';
+		return '2.1';
 	}
 
 	/**
@@ -123,7 +123,6 @@ class c2c_AdminPostNavigation {
 	 * @since 1.7
 	 */
 	public static function register_post_page_hooks() {
-
 		// Load textdomain.
 		load_plugin_textdomain( 'admin-post-navigation' );
 

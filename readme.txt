@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.7
 Tested up to: 4.9
-Stable tag: 2.0
+Stable tag: 2.1
 
 Adds links to navigate to the next and previous posts when editing a post in the WordPress admin.
 
@@ -19,7 +19,7 @@ By default, a previous/next post is determined by the next lower/higher valid po
 
 Users can customize how post navigation ordering is handled via the "Screen Options" panel available at the top of every page when editing a post. A dropdown presents options to order navigation by: 'ID', 'menu_order', 'post_date', 'post_modified', 'post_name', and 'post_title'. Post navigation can further be customized via filters (see Filters section).
 
-NOTE: Be sure to save the post currently being edited before navigating away to the previous/next post!
+NOTE: Be sure to save the post currently being edited (if you've made any changes) before navigating away to the previous/next post!
 
 Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-post-navigation/) | [Plugin Directory Page](https://wordpress.org/plugins/admin-post-navigation/) | [GitHub](https://github.com/coffe2code/admin-post-navigation/) | [Author Homepage](http://coffee2code.com)
 
@@ -27,8 +27,9 @@ Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/admin-post-navigation
 == Installation ==
 
 1. Unzip `admin-post-navigation.zip` inside the `/wp-content/plugins/` directory for your site (or install via the built-in WordPress plugin installer)
-1. Activate the plugin through the 'Plugins' admin menu in WordPress
-1. See documentation for available customizations, if so inclined
+2. Activate the plugin through the 'Plugins' admin menu in WordPress
+3. Optional: When editing a post type that supports admin navigation (which are all post types by default), use the "Screen Options" menu to customize how navigation is handled.
+4. Optional: See documentation for available programmatic customizations
 
 
 == Screenshots ==
@@ -237,13 +238,13 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
 
 == Changelog ==
 
-= () =
+= 2.1 (2017-12-26) =
 * New: Add ability for users to customize the navigation order via a Screen Options dropdown.
     * Add optional `$user_id` arg to `get_post_type_orderby()`, and use it, to take into account user preference.
     * Add `$user_id` arg to 'c2c_admin_post_navigation_orderby' filter.
     * Add `get_setting_name()` helper function for getting the setting name for the given post type.
     * Add `screen_settings()` to output the dropdown.
-    * Add `save_screen_settings() to save user's preference.
+    * Add `save_screen_settings()` to save user's preference.
 * Fix: Resolve issue where navigation links failed to appear on posts with an apostrophe in their titles.
 * New: Add `is_valid_orderby()` helper function to verify a given orderby value is valid.
 * New: Add `get_post_statuses()` for getting post statuses valid for navigation of a given post type.
@@ -422,7 +423,7 @@ add_filter( 'c2c_admin_post_navigation_display', 'override_apn_display' );
 == Upgrade Notice ==
 
 = 2.1 =
-Recommended update: added screen option for users to customize post navigation order for each post type, fixed bug where navigation didn't appear for posts with apostrophe in title, updated unit test bootstrap file, noted compatibility is now WP 4.6-4.7+, and updated copyright date (2017)
+Recommended update: added screen option for users to customize post navigation order for each post type, fixed bug where navigation didn't appear for posts with apostrophe in title, updated unit test bootstrap file, noted compatibility is now WP 4.7-4.9+, and updated copyright date (2018)
 
 = 2.0 =
 Recommended update: added RTL support, moved CSS & JS into enqueueable files, enabled navigation for media files, adjustments to utilize language packs, minor unit test tweaks, noted compatibility through WP 4.4+, and updated copyright date
